@@ -12,10 +12,10 @@ Servo ESC4;
 void setup() {
   Serial.begin(9600);
   
-  ESC1.attach(3);
-  ESC2.attach(5);
-  ESC3.attach(9);
-  ESC4.attach(6);
+  ESC1.attach(3,1100,1900);
+  ESC2.attach(5,1100,1900);
+  ESC3.attach(9,1100,1900);
+  ESC4.attach(6,1100,1900);
 
   ESC1.writeMicroseconds(1500);
   ESC2.writeMicroseconds(1500);
