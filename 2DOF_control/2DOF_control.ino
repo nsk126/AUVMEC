@@ -46,16 +46,18 @@ void loop() {
   usec_x2 = 3000 - usec_x1;
   usec_y = map(Move[1],0,255,1200,1800);
 
-  Serial.print(usec_x1);Serial.print(" ");Serial.print(usec_x2);Serial.print(" ");Serial.print(usec_y);Serial.print(" ");
-  Serial.println();
- 
-  
   ESC1.writeMicroseconds(usec_x1);
   ESC2.writeMicroseconds(usec_x1);
   ESC3.writeMicroseconds(usec_x2);
   ESC4.writeMicroseconds(usec_x2);
   ESC5.writeMicroseconds(usec_y);
   ESC6.writeMicroseconds(usec_y);
+
+  Serial.print(usec_x1);Serial.print(" ");Serial.print(usec_x2);Serial.print(" ");Serial.print(usec_y);Serial.print(" ");
+  Serial.println();
+ 
+  
+
   
   delay(200);
 
