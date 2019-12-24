@@ -12,13 +12,13 @@ void setup() {
 void loop() {
 
   int pot1 = analogRead(0);
-  int pot2 = analogRead(1);
+  int pot2 = 547;
   int pwm1,pwm2,pwm3,pwm4,pwm5,pwm6;
 
   float xforce = mapfloat(pot1,0,1023,-8.2024,8.2024);
   float yforce = mapfloat(pot2,0,1023,-5.8,5.8);
 
-  Serial.print("X = ");Serial.print(xforce);Serial.print("  Y = ");Serial.print(yforce);
+   Serial.print("X = ");Serial.print(xforce);Serial.print("  Y = ");Serial.print(yforce);
   pwm1 = pwm2 = pwm3 = pwm4 = force_to_pwm(xforce/(2*sqrt(2)));
   Serial.print("  1,2,3,4 = ");Serial.print(pwm1);Serial.print("  5 = ");
 
@@ -26,7 +26,6 @@ void loop() {
   pwm6 = force_to_pwm(-1 * yforce/2);
 
   Serial.print(pwm5);Serial.print("  6 = ");Serial.print(pwm6);Serial.println();
-
   Move[0] = pot1 >> 8; //pot1h 
   Move[1] = pot1 & 0xFF;//pot1l 
   Move[2] = pot2 >> 8;//pot2h 
