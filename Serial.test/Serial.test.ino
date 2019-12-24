@@ -10,7 +10,7 @@ void setup() {
 }
 
 void loop() {
-//
+
  int pot1 = analogRead(0);
   pot1 = map(pot1,0,1023,0,255);
 
