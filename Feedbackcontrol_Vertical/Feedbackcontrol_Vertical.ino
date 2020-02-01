@@ -18,9 +18,6 @@ MS5837 P;
 #define Ki 0
 #define Kd 0
 
-#define Ti 0
-#define Td 0
-
 // Global 
 int PWM[6]; // PWM array for 6 thrusters
 const float dt = 0.01;
@@ -74,10 +71,10 @@ void loop() {
   float prop = Kp * (required_Depth - Depth);
 
   //Derivative Gain
-  float deri = Kd * Td * (Depth - depthd)/dt;
+  float deri = Kd * (Depth - depthd)/dt;
 
   //Integral Gain
-  float inte = Ki * depthi/Ti;
+  float inte = Ki * depthi;
 
   float AUV_Heave = Plant((prop + deri + inte));
   Heave(AUV_Heave,0);
