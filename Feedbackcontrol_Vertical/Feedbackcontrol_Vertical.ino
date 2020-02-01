@@ -64,7 +64,8 @@ void loop() {
  // T6R - D10 - ESC5
 
   P.read();
-  float Depth = P.depth() + 0.675038; // in meters
+  // Offset for sensor at 0m = + 0.675038
+  float Depth = P.depth() + 0.675038; // in meters 
   float required_Depth = 1.00; // set a particular value 
 
   //Prop Gain
