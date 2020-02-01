@@ -14,9 +14,9 @@ Servo ESC6;
 MS5837 P;
 
 // PID parameters
-#define Kp 0
-#define Ki 0
-#define Kd 0
+#define Kp 0 // no units
+#define Ki 0 // 1/s 
+#define Kd 0 // s
 
 // Global 
 int PWM[6]; // PWM array for 6 thrusters
