@@ -78,6 +78,7 @@ void loop() {
   float inte = Ki * depthi;
 
   float AUV_Heave = Plant((prop + deri + inte));
+  println(AUV_Heave);
   Heave(AUV_Heave,0);
 
   depthd = Depth;
@@ -85,7 +86,7 @@ void loop() {
 }
 
 float Plant(float pos){
-  return 0; // replace with plant equations Position --> Thrust in kgf
+  return -1.125*(pos/0.01) + 73.573*sq(pos/0.01) + 0.44;
 }
 int force_to_pwm_cw(float force){
   if(force < 0){
