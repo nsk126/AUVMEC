@@ -12,6 +12,8 @@ matplotlib.use("TkAgg")
 style.use("ggplot")
 initial_time = time.time()
 
+ser = serial.Serial('/dev/ttyUSB2',115200)
+
 root = tk.Tk()
 root.title("AUVMEC")
 root.geometry("1100x500")
@@ -31,8 +33,9 @@ ax = fig.add_subplot(111)
 
 xs = []
 ys = []
+zs = []
 
-def animate(i, xs, ys):
+def animate(i, xs, ys,zs):
 
     values = [Depth.get(),Kp.get(),Ki.get(),Kd.get()]
     # print(values)
@@ -43,8 +46,29 @@ def animate(i, xs, ys):
     xs = xs[-200:]
     ys = ys[-200:]
 
+    # a = '2.00,50.00,50.00,50.00>'
+    # ser.write(a.encode('ascii'))
+
+    temp_str = ""
+    temp_str += str(values[0])
+    temp_str += ","
+    temp_str += str(values[1])
+    temp_str += ","
+    temp_str += str(values[2])
+    temp_str += ","
+    temp_str += str(values[3])
+    temp_str += ">"
+
+    ser.write(temp_str.encode('ascii'))
+    sensor = float(ser.readline())
+
+    zs.append(sensor)
+    zs = zs[-200:]
+
+
     ax.clear()
-    ax.plot(xs,ys)
+    ax.plot(xs,ys,'r')
+    ax.plot(xs,zs,'b')
     ax.set_xlabel("Time(s)")
     ax.set_ylabel("Depth(m)")
 
@@ -68,6 +92,6 @@ canvas.get_tk_widget().pack()
 
 # root.after(time_step,see)
 
-ani = animation.FuncAnimation(fig,animate,fargs=(xs,ys),interval=time_step)
+ani = animation.FuncAnimation(fig,animate,fargs=(xs,ys,zs),interval=time_step)
 
 root.mainloop()
