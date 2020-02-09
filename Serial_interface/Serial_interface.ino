@@ -1,23 +1,45 @@
+#include <Wire.h>
 
 const byte numChars = 23;
 char receivedChars[numChars];   // an array to store the received data
 float var[4];
 boolean newData = false;
+// PC --> Serial interface --> Feedback control
 
+typedef union {
+  byte b[4];
+  float v;
+} converter;
+converter f;
+
+typedef union {
+  byte b[4];
+  float v;
+} sender;
+sender s;
 
 void setup() {
-    Serial.begin(115200);
-    Serial.println("<Arduino is ready>");
-    randomSeed(analogRead(0));
+    Serial.begin(115200);    
+    Wire.begin(8);
+    Wire.onRequest(requestEvent);
+    Wire.onReceive(receiveEvent);
 }
 
 void loop() {
+    Serial.println(1);
     recvWithEndMarker();
     showNewData();
-    
 }
 
-
+void receiveEvent(int howMany) {
+  static uint8_t i = 0; 
+  while (1 < Wire.available()) { // loop through all but the last
+    s.b[i] = Wire.read(); // receive byte as a character
+    i++;
+  }
+  int x = Wire.read();    // receive byte as an integer
+  Serial.println(x);         // print the integer
+}
 
 void recvWithEndMarker() {
     static byte ndx = 0;
@@ -42,7 +64,6 @@ void recvWithEndMarker() {
 
 void showNewData() {
     if (newData == true) {
-        //Serial.write(receivedChars);Serial.write("\n");
         char* token = strtok(receivedChars,",");
         var[0] = atof(token);
         token = strtok(NULL,",");
@@ -51,15 +72,16 @@ void showNewData() {
         var[2] = atof(token);
         token = strtok(NULL,",");
         var[3] = atof(token);
-
-        float randno = random(201)/100.0;
-//        Serial.write("%f",randno);Serial.write(">");
-         Serial.println(randno);
-
         newData = false;
     }
 }
-
-float mapfloat(float x, float in_min, float in_max, float out_min, float out_max){
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+void requestEvent() {
+  f.v = var[0];
+  Wire.write(f.b,4);
+  f.v = var[1];
+  Wire.write(f.b,4);
+  f.v = var[2];
+  Wire.write(f.b,4);
+  f.v = var[3];
+  Wire.write(f.b,4);
 }
