@@ -18,3 +18,4 @@
 - Negative Half
 `  PWM(f,V) = 1137 + 192.3*f + 39.66*V + 10.32*(f^2)  - 3.917*f*V - 1.189 *(V^2) `      
     - *R-square: 0.9475*
+    - ![SurfaceFit](negHalf.png)
