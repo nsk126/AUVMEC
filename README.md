@@ -1,4 +1,5 @@
 # AUVMEC
+## Thruster Orientation for CW and CCW propellors
 ![](https://www.ardusub.com/images/vectored-frame.png)
 
 ### Curve Fitting equations for T200s
