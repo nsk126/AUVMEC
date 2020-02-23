@@ -7,7 +7,7 @@
 ## Curve Fitting equations for T200s
 *Note: All forces are in Kgf*
 
-#### Curve Fit - PWM(f)
+#### Curve Fit - PWM(f) @12V
 - Negative Half
 `PWM(f) = 7.359 * (f^3) + 47.59 * (f^2) + 199.2 * (f) + 1461;`
 - Positive Half
