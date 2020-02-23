@@ -1,6 +1,6 @@
 # AUVMEC
 ## Thruster Orientation for CW and CCW propellors
-### Green: CW , Blue: CCW
+### Green: CCW , Blue: CW
 
 ![](https://www.ardusub.com/images/vectored-frame.png)
 
