@@ -1,8 +1,10 @@
 # AUVMEC
 ## Thruster Orientation for CW and CCW propellors
+### Green: CW , Blue: CCW
+
 ![](https://www.ardusub.com/images/vectored-frame.png)
 
-### Curve Fitting equations for T200s
+## Curve Fitting equations for T200s
 
 #### 3rd order Polynomial fit @12V
 - Negative Half
