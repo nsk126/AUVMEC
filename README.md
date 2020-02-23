@@ -27,7 +27,7 @@
 	
 	
 ## Dev Process
-- [ ] Rebuild Kill switch(KS)
+- [x] Rebuild Kill switch(KS)
 - [ ] Full system KS that turns off ESCs, & Resets Arduino.
 	- [ ] Power The KS using Main Batteries.
 	- [ ] Src -> Buck (5V) -> KS
