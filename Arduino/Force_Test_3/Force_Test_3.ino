@@ -29,23 +29,26 @@ void setup() {
   ESC5.writeMicroseconds(PWM[4]);
   ESC6.writeMicroseconds(PWM[5]);
 
-  delay(120000);// 7s delay as per Blue Robotics
+  delay(7000);// 7s delay as per Blue Robotics
 }
 
 
 void loop() {
  // T1 - D9 - ESC4
  // T2 - D3 - ESC1
- // T3 - D6 - ESC3
+ // T3 - D6 - ESC3.
  // T4 - D5 - ESC2
  // T5L - D11 - ESC6
  // T6R - D10 - ESC5
 
 
  // Start Here
-  Heave(0.45,13000);
-  Surge(1,40000);
-  Stall(45000);
+  Heave(0.45,8000);
+  Surge(1,5000);
+  Yaw(1,3000);
+  Surge(1,10000);
+  Stall(20000);
+  
 }
 int force_to_pwm_cw(float force){
   if(force < 0){
