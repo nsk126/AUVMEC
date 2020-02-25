@@ -25,6 +25,9 @@ sliderframe.pack(side = tk.LEFT,expand=True)
 plotframe = tk.Frame(root,bd=35)
 plotframe.pack(side = tk.RIGHT,expand=True)
 
+stopButtonFrame = tk.Frame(root,bd=35)
+stopButtonFrame.pack(side=tk.LEFT,expand=True)
+
 time_step = 50
 
 values = []
@@ -76,9 +79,12 @@ def animate(i, xs, ys, zs):
     ax.plot(xs,zs,'b')
     ax.set_xlabel("Time(s)")
     ax.set_ylabel("Depth(m)")
+    ax.set_ylim(0,2)
+    
     
 
-
+Emergency_stop = tk.Button(stopButtonFrame,text="Stop",height=4,width=15,bd=5)
+Emergency_stop.pack()
 
 Depth = tk.Scale(sliderframe,label="Depth",activebackground="#0000ff",orient='horizontal', length=800, from_=0.00, to=0.60, resolution=0.01)
 Depth.pack()
