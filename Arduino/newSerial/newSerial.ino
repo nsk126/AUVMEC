@@ -11,9 +11,12 @@ void setup() {
 }
 
 void loop() {
-
 }
 
+void sendData(){
+  float x = float(random(0,200))/100;
+  Serial.println(x);
+}
 void serialEvent(){
   serialData = Serial.readString();
   Kp = getKp(serialData);
@@ -22,9 +25,8 @@ void serialEvent(){
   Depth = getDepth(serialData);
   G = getG(serialData);
 
-//  float x = float(random(0,200))/100;
-//  Serial.println(x);
-  Serial.println("1.00");
+
+  sendData();
 }
 
 float getKp(String data){

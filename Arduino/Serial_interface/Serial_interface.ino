@@ -26,7 +26,6 @@ void setup() {
 }
 
 void loop() {
-    Serial.println(1);
     recvWithEndMarker();
     showNewData();
 }
@@ -41,6 +40,7 @@ void receiveEvent(int howMany) {
 }
 
 void recvWithEndMarker() {
+    Serial.println(1);
     static byte ndx = 0;
     char endMarker = '>';
     char rc;

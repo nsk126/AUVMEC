@@ -17,7 +17,7 @@ ser = serial.Serial('COM6',baudrate=115200,timeout=0.1)
 
 root = tk.Tk()
 root.title("AUVMEC")
-root.geometry("1100x500")
+root.geometry("1600x600")
 
 sliderframe = tk.Frame(root,bd=55)
 sliderframe.pack(side = tk.LEFT,expand=True)
@@ -36,7 +36,7 @@ xs = []
 ys = []
 zs = []
 
-def animate(i, xs, ys):
+def animate(i, xs, ys, zs):
 
     values = [Depth.get(),Kp.get(),Ki.get(),Kd.get(),G.get()]
     # print(values)
@@ -46,9 +46,6 @@ def animate(i, xs, ys):
 
     xs = xs[-200:]
     ys = ys[-200:]
-
-    # a = '2.00,50.00,50.00,50.00>'
-    # ser.write(a.encode('ascii'))
 
     temp_str = "X"
     temp_str += str(values[0])
@@ -64,40 +61,38 @@ def animate(i, xs, ys):
     ser.write(temp_str.encode("ascii"))
     
     sens = ser.read(ser.inWaiting())
-    # sens = float(ser.readline())
-    sens = float(sens)
-    print(sens)
-    # print(float(sens.strip().decode("utf-8")))
-    # sens = sens.decode("utf-8")
-    
-    # sensb = float(sensa)
+    # sens = ser.readline()
+    if sens != b'':
+        sens = sens.strip().decode("utf-8")
+        sens = float(sens)
+        zs.append(sens)
+    else:
+        zs.append(float(0))
 
-
-    # zs.append(sensor)
-    # zs = zs[-200:]
+    zs = zs[-200:]
 
     ax.clear()
     ax.plot(xs,ys,'r')
-    # ax.plot(xs,zs,'b')
+    ax.plot(xs,zs,'b')
     ax.set_xlabel("Time(s)")
     ax.set_ylabel("Depth(m)")
     
 
 
 
-Depth = tk.Scale(sliderframe,label="Depth",activebackground="#0000ff",orient='horizontal', length=400, from_=0.00, to=2.00, resolution=0.01)
+Depth = tk.Scale(sliderframe,label="Depth",activebackground="#0000ff",orient='horizontal', length=800, from_=0.00, to=0.60, resolution=0.01)
 Depth.pack()
 
-Kp = tk.Scale(sliderframe,label="Kp",activebackground="#00ff00",orient='horizontal', length=400, from_=0.0, to=50.0, resolution=0.05)
+Kp = tk.Scale(sliderframe,label="Kp",activebackground="#00ff00",orient='horizontal', length=800, from_=0.00, to=10.00, resolution=0.01)
 Kp.pack()
 
-Ki = tk.Scale(sliderframe,label="Ki",activebackground="#00ff00",orient='horizontal', length=400, from_=0.0, to=50.0, resolution=0.05)
+Ki = tk.Scale(sliderframe,label="Ki",activebackground="#00ff00",orient='horizontal', length=800, from_=0.0, to=3.0, resolution=0.001)
 Ki.pack()
 
-Kd = tk.Scale(sliderframe,label="Kd",activebackground="#00ff00",orient='horizontal', length=400, from_=0.0, to=50.0, resolution=0.05)
+Kd = tk.Scale(sliderframe,label="Kd",activebackground="#00ff00",orient='horizontal', length=800, from_=0.0, to=3.0, resolution=0.001)
 Kd.pack()
 
-G = tk.Scale(sliderframe,label="G",activebackground="#FF00FF",orient='horizontal', length=400, from_=0.0, to=50.0, resolution=0.05)
+G = tk.Scale(sliderframe,label="G",activebackground="#FF00FF",orient='horizontal', length=800, from_=0.10, to=0.65, resolution=0.01)
 G.pack()
 
 canvas = FigureCanvasTkAgg(fig,plotframe)
@@ -106,6 +101,6 @@ canvas.get_tk_widget().pack()
 
 # root.after(time_step,see)
 
-ani = animation.FuncAnimation(fig,animate,fargs=(xs,ys),interval=time_step)
+ani = animation.FuncAnimation(fig,animate,fargs=(xs,ys,zs),interval=time_step)
 
 root.mainloop()

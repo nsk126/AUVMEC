@@ -12,7 +12,7 @@ matplotlib.use("TkAgg")
 style.use("ggplot")
 initial_time = time.time()
 
-ser = serial.Serial('/dev/ttyUSB1',115200)
+ser = serial.Serial('COM6',115200)
 
 root = tk.Tk()
 root.title("AUVMEC")
