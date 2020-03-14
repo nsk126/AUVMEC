@@ -66,22 +66,22 @@ void loop() {
   // Update pressure and temperature readings
   sensor.read();
 
-  Serial.print("Pressure: "); 
-  Serial.print(sensor.pressure()); 
-  Serial.println(" mbar");
-  
-  Serial.print("Temperature: "); 
-  Serial.print(sensor.temperature()); 
-  Serial.println(" deg C");
+//  Serial.print("Pressure: "); 
+//  Serial.print(sensor.pressure()); 
+//  Serial.println(" mbar");
+//  
+//  Serial.print("Temperature: "); 
+//  Serial.print(sensor.temperature()); 
+//  Serial.println(" deg C");
   
   Serial.print("Depth: "); 
-  Serial.print(0.6585+sensor.depth(),4); 
+  Serial.print(0.6386 + sensor.depth(),4); 
   Serial.println(" m");
   
-  Serial.print("Altitude: "); 
-  Serial.print(sensor.altitude()); 
-  Serial.println(" m above mean sea level");
-  Serial.println();
+//  Serial.print("Altitude: "); 
+//  Serial.print(sensor.altitude()); 
+//  Serial.println(" m above mean sea level");
+//  Serial.println();
 
-  delay(1000);
+//  delay(1000);
 }

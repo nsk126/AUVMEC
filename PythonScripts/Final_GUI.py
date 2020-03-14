@@ -1,5 +1,3 @@
-#!/usr/bin/python3.7
-
 import tkinter as tk
 import serial
 import matplotlib
