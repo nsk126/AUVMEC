@@ -28,16 +28,16 @@
 
 ### Serial Comms
 #### InHouse Arduino
-	-[x]Read Control parameters, 3 Variables
-	-[ ]Read Reference Depth
-	-[ ]Write Recorded Depth
-	-[ ]Write Recorded Flow rate
+	-[x] Read Control parameters, 3 Variables
+	-[ ] Read Reference Depth
+	-[ ] Write Recorded Depth
+	-[ ] Write Recorded Flow rate
 	-I2C Bus Master 
 	
 #### Out Arduino
-	-[x]Write Control Parameters, 3 Variables
-	-[ ]Write Reference Depth
-	-[ ]Read Recorded Depth
-	-[ ]Read Recorded Flow rate
-	-[ ]I2C Slave Address 0x08
+	-[x] Write Control Parameters, 3 Variables
+	-[ ] Write Reference Depth
+	-[ ] Read Recorded Depth
+	-[ ] Read Recorded Flow rate
+	-I2C Slave Address 0x08
 	
