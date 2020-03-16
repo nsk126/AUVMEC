@@ -26,15 +26,15 @@
     ![SurfaceFit](images/posHalf.png)
 	
 
-#### Serial Comms
-- InHouse Arduino
+### Serial Comms
+#### InHouse Arduino
 	- [x]Read Control parameters, 3 Variables
 	- [ ]Read Reference Depth
 	- [ ]Write Recorded Depth
 	- [ ]Write Recorded Flow rate
 	- I2C Bus Master 
 	
-- Out Arduino
+#### Out Arduino
 	- [x]Write Control Parameters, 3 Variables
 	- [ ]Write Reference Depth
 	- [ ]Read Recorded Depth
