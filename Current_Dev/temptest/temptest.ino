@@ -32,13 +32,13 @@ int PWM[6]; // PWM array for 6 thrusters
 
 
 // PID parameters
-float Kpp = 0.5; // no units
+float Kpp = 0.7; // no units
 float Kip = 0; // 1/s
-float Kdp = 0.01; // s
+float Kdp = 0; // s
 float Kpv = 0; // no units
 float Kiv = 0; // 1/s
 float Kdv = 0; // s
-float neu_g = 0.50;
+float neu_g = 0.35;
 
 /* T1 - D9 - ESC4
  * T2 - D3 - ESC1
@@ -84,7 +84,7 @@ void setup() {
   ESC5.writeMicroseconds(PWM[4]);
   ESC6.writeMicroseconds(PWM[5]);
 
-  delay(120000);// 7s delay as per Blue Robotics
+  delay(300000);// 7s delay as per Blue Robotics
 
   /* Timer */
   timer = micros();
@@ -100,7 +100,7 @@ void loop() {
   float givenVel = 0;
   float givenAcc = 0;
   
-  float currentDepth = sensor.depth() + 0.6386; // in meters
+  float currentDepth = sensor.depth() + 0.6886; // in meters
   
   double dt = (double)(micros() - timer)/1000000;
   timer = micros();
@@ -136,6 +136,9 @@ void loop() {
   float Thrust_gen = Thrust(Acc_now,currentVel,g);
 
   Heave(Thrust_gen,0);
+  Serial.print(currentDepth);Serial.print("\t");
+  Serial.print(Thrust_gen);Serial.print("\t");
+  Serial.print(PWM[4]);Serial.print("\t");Serial.println(PWM[5]);
 
   
   //Update
@@ -189,7 +192,7 @@ void Sway(float force,int duration){
 }
 void Heave(float force,int duration){  
   PWM[4] = force_to_pwm_cw(-force/2);// T5
-  PWM[5] = force_to_pwm_ccw(force/2);// T6
+  PWM[5] = force_to_pwm_ccw(-force/2);// T6
   PWM[4] = constrain(PWM[4],1380,1616);
   PWM[5] = constrain(PWM[5],1380,1616);
   ESC_write();
@@ -214,7 +217,6 @@ void Hstall(int duration){
   delay(duration);
 }
 void ESC_write(){
-  
   ESC1.writeMicroseconds(PWM[0]);
   ESC2.writeMicroseconds(PWM[1]);
   ESC3.writeMicroseconds(PWM[2]);

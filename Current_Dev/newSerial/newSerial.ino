@@ -15,8 +15,6 @@ void setup() {
   Serial.setTimeout(10);
   Wire.onReceive(receiveEvent);
   Wire.onRequest(requestEvent);
-  // For a RV
-  randomSeed(analogRead(0));
 }
 
 void requestEvent() {
@@ -29,8 +27,7 @@ void requestEvent() {
   convert.f = Depth;
   Wire.write(convert.b,4);
   convert.f = G;
-  Wire.write(convert.b,4);
-    
+  Wire.write(convert.b,4);   
 }
 
 void loop() {
@@ -57,8 +54,6 @@ void serialEvent(){
   Kd = getKd(serialData);
   Depth = getDepth(serialData);
   G = getG(serialData);
-
-
   sendData();
 }
 

@@ -32,6 +32,8 @@
 	-[ ] Read Reference Depth
 	-[ ] Write Recorded Depth
 	-[ ] Write Recorded Flow rate
+	-[ ] Write Calculated Velocity via Depth 
+	-[ ] Write Each PWM, Kgf values of Thrusters
 I2C Bus Master 
 	
 #### Out Arduino
@@ -41,3 +43,22 @@ I2C Bus Master
 	-[ ] Read Recorded Flow rate
 I2C Slave Address 0x08
 	
+	
+###Summarized
+	- To AUV 
+		- Control Kp,Ki,Kd
+		- Reference Depth
+		- Gravity Vector
+		- Stop Flag
+		- Total 6 Variables
+		- Master <- Slave 0x08
+	- From AUV
+		- Measured Depth
+		- Calc Velocity using Depth sensor
+		- Calc Velocity using Flow meter
+		- PWM/Thrust value from each thruster
+		- Total 3
+		- Each calculated term from fossen Eq
+		- ?
+		- Master -> Slave 0x08 
+		
