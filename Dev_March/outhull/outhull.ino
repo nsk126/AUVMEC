@@ -1,7 +1,7 @@
 #include <Wire.h>
 
 #define sendSize 6
-#define recSize 3
+#define recSize 6
 
 float Kp,Ki,Kd,Depth,G,State;
 float data2Send[sendSize];

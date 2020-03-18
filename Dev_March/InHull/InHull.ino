@@ -5,7 +5,7 @@
 
 #define Out 0x08
 #define recSize 6
-#define sendSize 3
+#define sendSize 6
 #define Grav 9.80665
 #define M 30.12
 
@@ -72,13 +72,14 @@ union floatToBytes {
 void setup(){
 	Wire.begin();
 	Serial.begin(9600);
-  while (!sensor.init()) {
-    Serial.println("Init failed!");
-    Serial.println("Are SDA/SCL connected correctly?");
-    Serial.println("Blue Robotics Bar02: White=SDA, Green=SCL");
-    Serial.println("\n\n\n");
-    delay(5000);
-  }
+//  while (!sensor.init()) {
+//    Serial.println("Init failed!");
+//    Serial.println("Are SDA/SCL connected correctly?");
+//    Serial.println("Blue Robotics Bar02: White=SDA, Green=SCL");
+//    Serial.println("\n\n\n");
+//    delay(5000);
+//  }
+  Serial.println("Start");
   sensor.setModel(MS5837::MS5837_02BA); // For Bar02
   sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
   ESC5.attach(11, 1100, 1900);
@@ -138,6 +139,7 @@ void loop(){
   float givenAcc = 0;
   
   float currentDepth = sensor.depth() + 0.6546; // in meters
+  Serial.println(currentDepth);
   sendData[0] = currentDepth;
   double dt = (double)(micros() - timer)/1000000;
   timer = micros();
@@ -161,13 +163,18 @@ void loop(){
   float g = neu_g * Grav;
   float Thrust_gen = Thrust(Acc_now,currentVel,g);
   
+  sendData[3] = Thrust_gen;
+  
   if(recData[5] == 1.0){
     Heave(Thrust_gen,0);
   }else if(recData[5] == 0.0){
     Vstall(0);
   }
-
-  Serial.print(PWM[4]);Serial.print("\t");Serial.println(PWM[5]);
+  
+  sendData[4] = PWM[4];
+  sendData[5] = PWM[5];
+  
+//  Serial.print(PWM[4]);Serial.print("\t");Serial.println(PWM[5]);
   
   //Update
   prevDepth = currentDepth;
