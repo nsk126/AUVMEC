@@ -13,7 +13,7 @@ matplotlib.use("TkAgg")
 style.use("ggplot")
 initial_time = time.time()
 
-# ser = serial.Serial('COM6',baudrate=115200,timeout=0.1)
+ser = serial.Serial('COM6',baudrate=115200,timeout=0.1)
 
 root = tk.Tk()
 root.title("AUVMEC")
@@ -28,13 +28,16 @@ plotframe.pack(side = tk.RIGHT,expand=True)
 stopButtonFrame = tk.Frame(root,bd=5)
 stopButtonFrame.pack(side=tk.LEFT,expand=True)
 
+horizontalSliderFrame = tk.Frame(root,bd = 5)
+horizontalSliderFrame.pack(side=tk.BOTTOM,expand=True)
+
 time_step = 50
 
 values = []
 
 #Global variables for logging
-Log_kgf = []
-Log_vel = []
+# Log_kgf = []
+# Log_vel = []
 
 fig = Figure(figsize=(5,5), dpi=100)
 ax = fig.add_subplot(111)
@@ -45,20 +48,44 @@ zs = []
 
 
 def toggle_status():
-    if Emergency_stop.config('text')[-1] == 'On':
-        Emergency_stop.config(text='Off')
+    if Emergency_stop.config('text')[-1] == 'System On':
+        Emergency_stop.config(text='System Off')
+        H_stop.config(text='Horiz_Off')
+        V_stop.config(text='Verti_Off')
     else:
-        Emergency_stop.config(text='On')
+        Emergency_stop.config(text='System On')
+
+def toggle_status_H():
+    if H_stop.config('text')[-1] == 'Horiz_On':
+        H_stop.config(text='Horiz_Off')
+    else:
+        H_stop.config(text='Horiz_On')
+
+def toggle_status_V():
+    if V_stop.config('text')[-1] == 'Verti_On':
+        V_stop.config(text='Verti_Off')
+    else:
+        V_stop.config(text='Verti_On')
 
 
 def animate(i, xs, ys, zs):
-
-    if Emergency_stop.config('text')[-1] == 'On':
+    if Emergency_stop.config('text')[-1] == 'System On':
         status = 1
     else:
         status = 0
+    
 
-    values = [Depth.get(),Kp.get(),Ki.get(),Kd.get(),G.get(),status]
+    if H_stop.config('text')[-1] == 'Horiz_On':
+        h_status = 1
+    else:
+        h_status = 0
+    
+    if V_stop.config('text')[-1] == 'Verti_On':
+        v_status = 1
+    else:
+        v_status = 0
+    
+    values = [Depth.get(),Kp.get(),Ki.get(),Kd.get(),h_thrust.get(),status,h_status,v_status]
 
     xs.append(time.time() - initial_time)
     ys.append(values[0])
@@ -69,55 +96,58 @@ def animate(i, xs, ys, zs):
     xs = xs[-100:]
     ys = ys[-100:]
 
-    temp_str = "X"
+    temp_str = "A"
     temp_str += str(values[0])
-    temp_str += "Y"
+    temp_str += "B"
     temp_str += str(values[1])
-    temp_str += "Z"
+    temp_str += "C"
     temp_str += str(values[2])
-    temp_str += "W"
+    temp_str += "D"
     temp_str += str(values[3])
-    temp_str += "U"
+    temp_str += "E"
     temp_str += str(values[4])
-    temp_str += "A"
+    temp_str += "F"
     temp_str += str(values[5])
+    temp_str += "G"
+    temp_str += str(values[6])
+    temp_str += "H"
+    temp_str += str(values[7])
+    
     
 
-    # ser.write(temp_str.encode("ascii"))
+    ser.write(temp_str.encode("ascii"))
     
     # sens = ser.read(ser.inWaiting())
-    # sens = ser.readline()
+    sens = ser.readline()
+    # print(sens)
 
-    # if sens != b'':
-    #     sens = sens.strip().decode("utf-8")
-    #     sens = sens.split(",")
-    #     sens = sens[:-1]
-    #     # print(sens)
-    #     current_depth = float(sens[0])
-    #     current_vel = float(sens[1])
-    #     flow_vel = float(sens[2])
-    #     kfg_now = float(sens[3])
-    #     pwm_1 = float(sens[4])
-    #     pwm_2 = float(sens[5])
+    if sens != b'':
+        sens = sens.strip().decode("utf-8")
+        sens = sens.split(",")
+        sens = sens[:-1]
+        print(sens)
+        current_depth = float(sens[0])
+        error_I = float(sens[1])
+        error_D = float(sens[2])
+        kfg_now = float(sens[3])
+        accel_y = float(sens[4])
 
-    #     depthvar.set(current_depth)
-    #     velvar.set(current_vel)
-    #     flowvar.set(flow_vel)
-    #     PWM1.set(pwm_1)
-    #     PWM2.set(pwm_2)
-    #     KGF.set(kfg_now)
+        depthvar.set(current_depth)
+        velvar.set(error_I)
+        flowvar.set(error_D)
+        PWM1.set(accel_y)
+        KGF.set(kfg_now)
 
-    #     zs.append(current_depth)
-
+        zs.append(current_depth)
 
     #     #for logging
     #     # Log_kgf.append(kfg_now)
     #     # Log_vel.append(current_vel)
-    # else:
-    #     zs.append(float(0))
+    else:
+        zs.append(float(0))
 
     
-    zs.append(float(0))
+    # zs.append(float(0))
     zs = zs[-100:]
 
     ax.clear()
@@ -148,19 +178,24 @@ PWM_1_var.pack(side=tk.TOP)
 
 PWM2 = tk.StringVar()
 PWM_2_var = tk.Label(sliderframe,height=1,width=8,font=("Courier", 15),textvariable=PWM2, relief=tk.RAISED )
-PWM_2_var.place(x = 230, y = -2)
+# PWM_2_var.place(x = 230, y = -2)
+PWM_2_var.pack(side=tk.TOP)
+
 
 KGF = tk.StringVar()
 KGF_var = tk.Label(sliderframe,height=1,width=8,font=("Courier", 15),textvariable=KGF, relief=tk.RAISED )
 KGF_var.pack(side=tk.TOP)
 
 
-
-
 #Stop Button for thruster function
-Emergency_stop = tk.Button(stopButtonFrame,text="On",height=4,width=15,bd=5,command = toggle_status)
+Emergency_stop = tk.Button(stopButtonFrame,text="System On",height=4,width=15,bd=5,command = toggle_status)
 Emergency_stop.pack()
 
+H_stop = tk.Button(stopButtonFrame,text="Horiz_On",height=4,width=15,bd=5,command = toggle_status_H)
+H_stop.pack()
+
+V_stop = tk.Button(stopButtonFrame,text="Verti_On",height=4,width=15,bd=5,command = toggle_status_V)
+V_stop.pack()
 #Label widgets to display Txt
 depth_txt_2dislay = tk.StringVar()
 depth_txt_2dislay.set("Depth")
@@ -178,20 +213,20 @@ displayFlowVel = tk.Label(plotframe,height=1,width=8,font=("Symbol ", 15),textva
 displayFlowVel.place(x = 98, y = 58, width=100, height=20)
 
 #Slider Widgets
-Depth = tk.Scale(sliderframe,label="Depth",activebackground="#0000ff",orient='horizontal', length=800, from_=0.00, to=0.60, resolution=0.01)
+Depth = tk.Scale(sliderframe,label="Depth",activebackground="#0000ff",orient='horizontal', length=400, from_=0.00, to=0.60, resolution=0.01)
 Depth.pack()
 
-Kp = tk.Scale(sliderframe,label="Kp",activebackground="#00ff00",orient='horizontal', length=800, from_=0.00, to=4.00, resolution=0.01)
+Kp = tk.Scale(sliderframe,label="Kp",activebackground="#00ff00",orient='horizontal', length=400, from_=0.00, to=8.00, resolution=0.01)
 Kp.pack()
 
-Ki = tk.Scale(sliderframe,label="Ki",activebackground="#00ff00",orient='horizontal', length=800, from_=0.0, to=1.0, resolution=0.001)
+Ki = tk.Scale(sliderframe,label="Ki",activebackground="#00ff00",orient='horizontal', length=400, from_=0.0, to=5.0, resolution=0.01)
 Ki.pack()
 
-Kd = tk.Scale(sliderframe,label="Kd",activebackground="#00ff00",orient='horizontal', length=800, from_=0.0, to=1.0, resolution=0.001)
+Kd = tk.Scale(sliderframe,label="Kd",activebackground="#00ff00",orient='horizontal', length=400, from_=0.0, to=5.0, resolution=0.01)
 Kd.pack()
 
-G = tk.Scale(sliderframe,label="G",activebackground="#FF00FF",orient='horizontal', length=800, from_=0.00, to=0.65, resolution=0.01)
-G.pack()
+h_thrust = tk.Scale(horizontalSliderFrame,label="Thrust - Y",activebackground="#00ff00",orient='horizontal', length=400, from_= -4.0, to= 4.0, resolution=0.1)
+h_thrust.pack()
 
 canvas = FigureCanvasTkAgg(fig,plotframe)
 canvas.draw()
@@ -214,5 +249,3 @@ def on_closing():
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
 root.mainloop()
-
-

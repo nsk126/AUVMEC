@@ -2,7 +2,6 @@
 #include "MS5837.h"
 #include <Servo.h>
 
-
 #define Out 0x08
 #define recSize 6
 #define sendSize 6
@@ -49,20 +48,16 @@ float sendData[sendSize];
 //  1.431,9.867,5.332,7.234
 //};
 
-byte statusLed    = 13;
-
-byte sensorInterrupt = 0;  // 0 = digital pin 2
-byte sensorPin       = 2;
-
-float calibrationFactor = 0.45/0.57;
-
-volatile byte pulseCount;  
-
-float flowRate;
-unsigned int flowMilliLitres;
-unsigned long totalMilliLitres;
-float vel;
-unsigned long oldTime;
+//byte statusLed    = 13;
+//byte sensorInterrupt = 0;  // 0 = digital pin 2
+//byte sensorPin       = 2;
+//float calibrationFactor = 0.45/0.57;
+//volatile byte pulseCount;  
+//float flowRate;
+//unsigned int flowMilliLitres;
+//unsigned long totalMilliLitres;
+//float vel;
+//unsigned long oldTime;
 
 union floatToBytes {
 	byte b[4];
@@ -72,14 +67,14 @@ union floatToBytes {
 void setup(){
 	Wire.begin();
 	Serial.begin(9600);
-//  while (!sensor.init()) {
-//    Serial.println("Init failed!");
-//    Serial.println("Are SDA/SCL connected correctly?");
-//    Serial.println("Blue Robotics Bar02: White=SDA, Green=SCL");
-//    Serial.println("\n\n\n");
-//    delay(5000);
-//  }
   Serial.println("Start");
+  while (!sensor.init()) {
+    Serial.println("Init failed!");
+    Serial.println("Are SDA/SCL connected correctly?");
+    Serial.println("Blue Robotics Bar02: White=SDA, Green=SCL");
+    Serial.println("\n\n\n");
+    delay(5000);
+  }
   sensor.setModel(MS5837::MS5837_02BA); // For Bar02
   sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
   ESC5.attach(11, 1100, 1900);
@@ -89,21 +84,21 @@ void setup(){
   ESC6.writeMicroseconds(PWM[5]);
 
 
-  pinMode(statusLed, OUTPUT);
-  digitalWrite(statusLed, HIGH);  // We have an active-low LED attached
-  
-  pinMode(sensorPin, INPUT);
-  digitalWrite(sensorPin, HIGH);
-
-  pulseCount        = 0;
-  flowRate          = 0.0;
-  flowMilliLitres   = 0;
-  totalMilliLitres  = 0;
-  oldTime           = 0;
-  vel=0;
-  attachInterrupt(sensorInterrupt, pulseCounter, FALLING);
-  
-  delay(5000);
+//  pinMode(statusLed, OUTPUT);
+//  digitalWrite(statusLed, HIGH);  // We have an active-low LED attached
+//  
+//  pinMode(sensorPin, INPUT);
+//  digitalWrite(sensorPin, HIGH);
+//
+//  pulseCount        = 0;
+//  flowRate          = 0.0;
+//  flowMilliLitres   = 0;
+//  totalMilliLitres  = 0;
+//  oldTime           = 0;
+//  vel=0;
+//  attachInterrupt(sensorInterrupt, pulseCounter, FALLING);
+//  
+//  delay(5000);
   timer = micros();
 }
 
@@ -114,20 +109,22 @@ void loop(){
 	i2cMasterRead(Out,4 * recSize);
 //	sMoniter();
 
-  if((millis() - oldTime) > 1000)    // Only process counters once per second
-  { 
-    detachInterrupt(sensorInterrupt);
-    flowRate = ((1000.0 / (millis() - oldTime)) * pulseCount) / calibrationFactor;
-    oldTime = millis();
-    flowMilliLitres = (flowRate / 60) * 1000;
-    vel=flowRate*10/(3.14*1.905*1.905*60);
-    totalMilliLitres += flowMilliLitres;
-      
-    unsigned int frac;
-    sendData[2] = vel;
-    pulseCount = 0;
-    attachInterrupt(sensorInterrupt, pulseCounter, FALLING);
-  }
+//  if((millis() - oldTime) > 1000)    // Only process counters once per second
+//  { 
+//    detachInterrupt(sensorInterrupt);
+//    flowRate = ((1000.0 / (millis() - oldTime)) * pulseCount) / calibrationFactor;
+//    oldTime = millis();
+//    flowMilliLitres = (flowRate / 60) * 1000;
+//    vel=flowRate*10/(3.14*1.905*1.905*60);
+//    totalMilliLitres += flowMilliLitres;
+//      
+//    unsigned int frac;
+//    sendData[2] = vel;
+//    pulseCount = 0;
+//    attachInterrupt(sensorInterrupt, pulseCounter, FALLING);
+//  }
+
+
 /* System inputs */
   givenPos = recData[0];
   Kp = recData[1];
@@ -138,8 +135,8 @@ void loop(){
   float givenVel = 0;
   float givenAcc = 0;
   
-  float currentDepth = sensor.depth() + 0.6546; // in meters
-  Serial.println(currentDepth);
+  float currentDepth = sensor.depth() + 0.6853; // in meters
+//  Serial.println(currentDepth);
   sendData[0] = currentDepth;
   double dt = (double)(micros() - timer)/1000000;
   timer = micros();
@@ -184,9 +181,9 @@ void loop(){
   i2cMasterWrite(Out);
 }
 
-void pulseCounter(){
-  pulseCount++;
-}
+//void pulseCounter(){
+//  pulseCount++;
+//}
 
 float Drag(float vel){
   return 73.573*(vel) - 1.1255 + 0.0876;
@@ -218,8 +215,8 @@ int force_to_pwm_ccw(float force){
 void Heave(float force,int duration){  
   PWM[4] = force_to_pwm_cw(-force/2);// T5
   PWM[5] = force_to_pwm_ccw(-force/2);// T6
-  PWM[4] = constrain(PWM[4],1380,1616);
-  PWM[5] = constrain(PWM[5],1380,1616);
+  PWM[4] = constrain(PWM[4],1344,1656);
+  PWM[5] = constrain(PWM[5],1344,1656);
   ESC_write();
   delay(duration);
 }
@@ -240,9 +237,6 @@ void i2cMasterRead(uint8_t address, uint8_t nbytes){
 
 void i2cMasterWrite(uint8_t address){
 	Wire.beginTransmission(address);
-//  Serial.print(String(sendData[0],3)+"\t");
-//  Serial.print(String(sendData[1],3)+"\t");
-//  Serial.print(String(sendData[2],3)+"\n");
 	for(uint8_t i=0;i<sendSize;i++){
 		convert.f = sendData[i];
 		Wire.write(convert.b,4);
