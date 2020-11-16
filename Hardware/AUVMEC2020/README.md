@@ -16,7 +16,7 @@
 
 ---
 
-# PCB v1.1 checklist
+# PCB v1.1 plan 
 
 - 2oz+ or 70um+ copper trace thickness
 - Main power supply bus bar trace width 50A @30C increase
