@@ -18,6 +18,6 @@
 
 # PCB v1.1 checklist
 
-- 2oz or 70um + copper trace thickness
+- 2oz+ or 70um+ copper trace thickness
 - Main power supply bus bar trace width 50A @30C increase
 - Each thruster supply trace width 12A @30C increase
