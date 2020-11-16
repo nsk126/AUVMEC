@@ -2,7 +2,7 @@
 
 - 4 Relays JQX-16F(T91), 2 Relays JQX-15F(T90)
 - ESC connector bar meant to be placed on the bottom side
-- Few of the sitching vias are exposed, hence any possible connector must be kept away
+- Few of the stiching vias are exposed, hence any possible connector must be kept away
 - Buck Regulaters are meant to be placed on the bottom side (err in design)
 - Relay signa conn trace width : 0.25mm -> 1.4A @30C increase
 - All remaining signal conn trace width : 0.5mm -> 2.3A @30C increase
