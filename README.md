@@ -16,4 +16,4 @@
 `1464 - 1532 => 0 Kgf Force`
 
 ### PCB design for power system
-![PCB](Hardware/AUVPCB.png)
+![PCB](Hardware/AUVMEC2020/AUVPCB.png)
