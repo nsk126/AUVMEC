@@ -15,3 +15,5 @@
 - Dead band
 `1464 - 1532 => 0 Kgf Force`
 
+### PCB design for power system
+![PCB](Hardware/AUVPCB.png)
