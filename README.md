@@ -15,5 +15,5 @@
 - Dead band
 `1464 - 1532 => 0 Kgf Force`
 
-### PCB Sheild designed for power deliver and control signal routing
+### PCB Sheild design for power deliver and control signal routing
 ![PCB](Hardware/AUVMEC2020/AUVPCB.png)
